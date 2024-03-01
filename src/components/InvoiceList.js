@@ -202,7 +202,7 @@ function InvoiceList({ invoices }) {
           <td style="border: 1px solid black; padding: 8px;">${TVA.toFixed(2)} $ </td>
         </tr>
         <tr>
-          <td style="border: 1px solid black; padding: 8px;">Total TTC:</td>
+          <td style="border: 1px solid black; padding: 8px;font-style: italic; font-weight: bold;">Total TTC:</td>
           <td style="border: 1px solid black; padding: 8px;">${totalTTC.toFixed(2)} $</td>
         </tr>
       </tbody>
