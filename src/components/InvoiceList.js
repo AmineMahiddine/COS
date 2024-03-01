@@ -18,7 +18,7 @@ import {
   Typography, // Add Typography from MUI
   // Button // Add Button from MUI
 } from "@mui/material";
-import { KeyboardArrowLeft, KeyboardArrowRight, Print } from "@mui/icons-material";
+import { KeyboardArrowLeft, KeyboardArrowRight, Margin, Print } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 
 function TablePaginationActions(props) {
@@ -109,75 +109,90 @@ function InvoiceList({ invoices }) {
     
     // Calculate total TTC
     const totalTTC = totalWithoutTVA + TVA;
-    
+
+
     // Prepare the facture content
     const itemsContent = invoice.InvoiceItems.map((item, index) => (
-      `<tr ">
-        <td style=" padding: 8px;">${index + 1}</td>
-        <td style=" padding: 8px;">${item.ItemLibelle}</td>
-        <td style=" padding: 8px;">${item.ItemQuantity}</td>
-        <td style=" padding: 8px;">${item.ItemPrice.toFixed(2)} $</td>
-        <td style=" padding: 8px;">${(item.ItemQuantity * item.ItemPrice).toFixed(2)}</td>
+      `<tr >
+        <td style=" border: 1px solid black; padding: 8px;">${index + 1}</td>
+        <td style=" border: 1px solid black; padding: 8px;">${item.ItemLibelle}</td>
+        <td style=" border: 1px solid black; padding: 8px;">${item.ItemQuantity}</td>
+        <td style=" border: 1px solid black; padding: 8px;">${item.ItemPrice.toFixed(2)} $</td>
+        <td style=" border: 1px solid black; padding: 8px;">${(item.ItemQuantity * item.ItemPrice).toFixed(2)} $</td>
+        <td style="border: 1px solid black; padding: 8px;">
+        ${(item.ItemQuantity *( item.ItemPrice + item.ItemPrice * (item.ItemTax / 100)).toFixed(2))} $
+      </td>
       </tr>`
     )).join('\n');
 
     const factureContent = `
     <style>
-@page { size: auto;  margin: 0mm; }
+@page { size: auto;  margin: 2mm; }
 </style>
     
-    <div>
-    <H1 style="text-align: center">Facture No ${invoice.InvoiceID}</H1>\n\n
-    <div style="text-align: center;">Date de facture : ${formatDate(invoice.InvoiceDate)}</div>\n\n
-    <table align="center" style="border-collapse: collapse;">
-  <tr>
-    <td style=" border-bottom: 1px solid black;">FOURNISSEUR</td>
+    <div style= "margin-left: 100px;margin-right: 100px;">
+    <div style="  font-style: italic; font-size: 24px;font-weight: bold;text-align: center;">Facture No ${invoice.InvoiceID}</div>
+    <div style="text-align: right;">Date de facture : ${formatDate(invoice.InvoiceDate)}</div>\n\n
+    <table align="margin-top: 30px;center" style="border-collapse: collapse;  width: 100%;">
+  <tr style="line-height: 8px;">
+    <td style=" font-style: italic;border-bottom: 1px solid black;margin-bottom: 0;">FOURNISSEUR</td>
     <td style=" padding: 18px;">&nbsp;</td> <!-- Empty cell for spacing -->
-    <td style=" border-bottom: 1px solid black;">CLIENT</td>
+    <td style=" font-style: italic;border-bottom: 1px solid black;">CLIENT</td>
+  </tr>
+  <tr style="line-height: 8px;">
+    <td style="   padding: 12px 0 0 0;    text-align: left;">
+    ${invoice.SupplierName}    
+    </td>
+
+    <td style=" padding: 12px 0 0 0;">&nbsp;</td> <!-- Empty cell for spacing -->
+    <td style=" padding: 12px 0 0 0; text-align: left;">
+    ${invoice.ClientName}
+    </td>
   </tr>
   <tr>
-    <td style=" padding: 8px; text-align: left;">
-      [Nom de l'entreprise du FOURNISSEUR]<br>
-      INFORMATION DE FOURNISSEUR
-    </td>
-    <td style=" padding: 8px;">&nbsp;</td> <!-- Empty cell for spacing -->
-    <td style=" padding: 8px; text-align: left;">
-      [Nom de l'entreprise du client]<br>
-      INFORMATION DE CLIENT
-    </td>
-  </tr>
-</table>\n\n
-    <table align="center" style="overflow-x:auto; border-collapse: collapse; margin-top: 16px; width: 90%;">
+  <td style="font-style: italic;  text-align: left;">
+  INFORMATION DE FOURNISSEUR
+  </td>
+
+  <td style=" padding: 8px;">&nbsp;</td> <!-- Empty cell for spacing -->
+<td style="font-style: italic;  text-align: left;">
+  INFORMATION DE CLIENT
+  </td>
+</tr>
+</table>
+    <table align="center" style="overflow-x:auto; border-collapse: collapse; margin-top: 16px; width: 100%;">
       <thead>
-        <tr>
+        <tr style="background-color: #ffc15e;">
           <th style="border: 1px solid black; padding: 8px;">N°</th>
           <th style="border: 1px solid black; padding: 8px;">LIBELLE</th>
           <th style="border: 1px solid black; padding: 8px;">QUANTITÉ</th>
-          <th style="border: 1px solid black; padding: 8px;">PRIX HT</th>
+          <th style="border: 1px solid black; padding: 8px;">PRIX</th>
+          <th style="border: 1px solid black; padding: 8px;">HT</th>
           <th style="border: 1px solid black; padding: 8px;">TTC</th>
         </tr>
       </thead>
       <tbody style="text-align: center;">
         ${itemsContent}
       </tbody>
-    </table>\n\n
-    <table align="center" style="border-collapse: collapse; margin-top: 16px;">
+    </table>
+    <table align="right" style="border-collapse: collapse; margin-top: 16px;">
       <tbody>
         <tr>
           <td style="border: 1px solid black; padding: 8px;">TOTAL sans TVA:</td>
           <td style="border: 1px solid black; padding: 8px;">${totalWithoutTVA.toFixed(2)} $</td>
         </tr>
         <tr>
-          <td style="border: 1px solid black; padding: 8px;">TVA:</td>
-          <td style="border: 1px solid black; padding: 8px;">${TVA.toFixed(2)} $ (${(invoice.InvoiceItems.reduce((acc, item) => acc + item.ItemTax, 0)).toFixed(2)}%)</td>
+          <td style="border: 1px solid black; padding: 8px;">TVA:</td >
+          <td style="border: 1px solid black; padding: 8px;">${TVA.toFixed(2)} $ </td>
         </tr>
         <tr>
           <td style="border: 1px solid black; padding: 8px;">Total TTC:</td>
           <td style="border: 1px solid black; padding: 8px;">${totalTTC.toFixed(2)} $</td>
         </tr>
       </tbody>
-    </table>\n\n
-    LA SIGNATURE</div>` ;
+    </table>\n\n\n\n\n\n\n\n\n\n
+    <div style="text-align: right;">LA SIGNATURE</div>
+    </div>` ;
 
     // Open a new window and print the facture content
     const printWindow = window.open("", "_blank");
@@ -197,6 +212,7 @@ function InvoiceList({ invoices }) {
 
   return (
     <Container maxWidth="lg" style={{ marginTop: '50px', marginBottom: '50px'}}>
+     <h1  style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Invoice Management System</h1>
       <Stack spacing={3}>
         <Paper sx={{ padding: 2, boxShadow: 3 }}>
           <Stack spacing={1} direction="row" marginBottom={2}>
@@ -219,12 +235,12 @@ function InvoiceList({ invoices }) {
             {/* Table Head */}
             <TableHead style={{ backgroundColor: "#F9F9F9" }}>
               <TableRow>
-                <TableCell align="center">Invoice ID</TableCell>
-                <TableCell align="center">Invoice Date</TableCell>
-                <TableCell align="center">Client Name</TableCell>
-                <TableCell align="center">Supplier Name</TableCell>
-                <TableCell align="center">Amount including VAT</TableCell>
-                <TableCell align="center">Print Facture</TableCell> {/* New column for Print Facture */}
+                <TableCell align="center">Facture ID</TableCell>
+                <TableCell align="center">Facture Date</TableCell>
+                <TableCell align="center">Client Nom</TableCell>
+                <TableCell align="center">Fournisseur Nom</TableCell>
+                <TableCell align="center">Montant TTC</TableCell>
+                <TableCell align="center">Imprimer Facture</TableCell> {/* New column for Print Facture */}
               </TableRow>
             </TableHead>
             {/* Table Body */}

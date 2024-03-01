@@ -21,7 +21,6 @@ const App = () => {
 
   return (
     <div>
-      <h1>Invoice Management System</h1>
       <InvoiceList invoices={invoices} />
     </div>
   );
