@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+
 import {
   Box,
   TextField,
@@ -15,7 +16,7 @@ import {
   Stack,
   Container, // Add Container from MUI
   Typography, // Add Typography from MUI
-  Button // Add Button from MUI
+  // Button // Add Button from MUI
 } from "@mui/material";
 import { KeyboardArrowLeft, KeyboardArrowRight, Print } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -121,6 +122,11 @@ function InvoiceList({ invoices }) {
     )).join('\n');
 
     const factureContent = `
+    <style>
+@page { size: auto;  margin: 0mm; }
+</style>
+    
+    <div>
     <H1 style="text-align: center">Facture No ${invoice.InvoiceID}</H1>\n\n
     <div style="text-align: center;">Date de facture : ${formatDate(invoice.InvoiceDate)}</div>\n\n
     <table align="center" style="border-collapse: collapse;">
@@ -171,7 +177,7 @@ function InvoiceList({ invoices }) {
         </tr>
       </tbody>
     </table>\n\n
-    LA SIGNATURE`;
+    LA SIGNATURE</div>` ;
 
     // Open a new window and print the facture content
     const printWindow = window.open("", "_blank");
