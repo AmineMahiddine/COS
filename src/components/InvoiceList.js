@@ -24,9 +24,18 @@ import SearchIcon from "@mui/icons-material/Search";
 function TablePaginationActions(props) {
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleBackButtonClick = () => onPageChange(page - 1);
-  const handleNextButtonClick = () => onPageChange(page + 1);
-
+  const handleBackButtonClick = () => {
+    const newPage = page - 1; // Calculate the new page
+    console.log("Current page:", page);
+    console.log("New page:", newPage);
+    onPageChange(null, newPage); // Pass the newPage parameter
+  };
+  const handleNextButtonClick = () => {
+    const newPage = page + 1; // Calculate the new page
+    console.log("Current page:", page);
+    console.log("New page:", newPage);
+    onPageChange(null, newPage); // Pass the newPage parameter
+  };
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
       <IconButton
@@ -62,15 +71,22 @@ function InvoiceList({ invoices }) {
 
   useEffect(() => {
     // Set default values when invoices change
+    
     setPage(0);
   }, [invoices]);
 
   const handleChangePage = (event, newPage) => {
+    
+    // console.log("New page:", newPage);
+
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const newRowsPerPage = setRowsPerPage(parseInt(event.target.value, 10));
+    // console.log("New rows per page:", newRowsPerPage);
+    setPage(newRowsPerPage);
+
     setPage(0);
   };
 
@@ -203,8 +219,10 @@ function InvoiceList({ invoices }) {
 
   // Filtering invoices based on the search query for client name or item labels
   const filteredInvoices = invoices.filter((invoice) =>
-    invoice.ClientName.toLowerCase().includes(searchQuery) ||
-    invoice.InvoiceItems.some((item) => item.ItemLibelle.toLowerCase().includes(searchQuery))
+  invoice.ClientName.toLowerCase().includes(searchQuery) ||
+  invoice.SupplierName.toLowerCase().includes(searchQuery) ||
+  invoice.InvoiceItems.some((item) => item.ItemLibelle.toLowerCase().includes(searchQuery)) 
+
   );
 
   const emptyRows =
@@ -218,7 +236,7 @@ function InvoiceList({ invoices }) {
           <Stack spacing={1} direction="row" marginBottom={2}>
             <TextField
               id="outlined-basic"
-              placeholder="Search By Client Name or Item Libelle ..."
+              placeholder="Recherche par nom de client ou article Libelle ..."
               variant="outlined"
               size="small"
               value={searchQuery}
